@@ -1,0 +1,8 @@
+{
+  "name": "jiayi-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "王嘉怡的个人作品集，一本可持续迭代的灵感手帐。",
+  "scripts": { "start": "node server.mjs", "check": "node check.mjs" },
+  "engines": { "node": ">=18" }
+}
