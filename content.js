@@ -2,7 +2,7 @@
 window.PORTFOLIO = {
   email: '2927411485@qq.com',
   stamps: [
-    { id: 'education', title: '教育与荣誉', english: 'LEARN & GROW', color: 'lavender', icon: '✧', sub: '清华 SIGS × 四川大学', detailTitle: '保持好奇，持续生长。', intro: '从环境设计出发，走向未来人居、用户体验与 AI 产品的交叉地带。', items: [
+    { id: 'education', title: '学业与成长', english: 'LEARN & GROW', color: 'lavender', icon: '✧', sub: '清华 SIGS × 四川大学', detailTitle: '保持好奇，持续生长。', intro: '从环境设计出发，走向未来人居、用户体验与 AI 产品的交叉地带。', items: [
       { title: '清华大学 · 深圳国际研究生院', date: '2026.08 — 2028.06', text: '未来人居项目 · 全英文项目，在读。' },
       { title: '四川大学 · 环境设计', date: '2022.09 — 2026.06', text: '艺术学院 & 灾后重建与管理学院创新班。必修均分 89.09/100，GPA 3.78/4.0，综合排名 2/41；已通过英语六级。' },
       { title: '奖励与认可', date: 'SELECTED HONORS', text: '国家奖学金、四川省优秀毕业生、四川大学优秀毕业生、连续两年四川大学优秀学生。设计竞赛涵盖中国人居环境设计学年奖金奖、米兰设计周一等奖、全国大学生物联网设计竞赛（华为杯）二等奖等。' }

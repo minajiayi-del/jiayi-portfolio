@@ -12,7 +12,7 @@ const data = context.window.PORTFOLIO;
 assert.ok(data.projects.length>0);assert.ok(data.stamps.length>0);
 const ids = data.projects.map(p=>p.id);
 assert.equal(new Set(ids).size,ids.length,'项目 ID 重复');
-const files = new Set([...html.matchAll(/(?:src|href)="([^"#]+)"/g)].map(m=>m[1]).filter(v=>!v.includes(':')));
+const files = new Set([...html.matchAll(/(?:src|href)="([^"#]+)"/g)].map(m=>m[1]).filter(v=>!v.includes(':')).map(v=>v.split(/[?#]/)[0]));
 for(const p of data.projects){
   assert.ok(p.sections.length>=3,`${p.id} 缺少项目过程`);
   assert.ok(p.metrics.length===3,`${p.id} 缺少指标`);
