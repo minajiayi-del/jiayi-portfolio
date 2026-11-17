@@ -139,6 +139,56 @@
     revealItems.forEach(el => el.classList.add('is-in'));
   }
 
+  // ---------- hero: roles linked to tagline keywords ----------
+  const hero = document.querySelector('.hero');
+  const roles = [...document.querySelectorAll('.role')];
+  const keywords = [...document.querySelectorAll('.hero-intro .kw')];
+  const order = ['people', 'tech', 'exp'];
+  let roleIndex = 0;
+  let roleTimer = null;
+  let heroVisible = true;
+  let hovering = false;
+  function setRole(key, auto) {
+    roles.forEach(r => { const on = r.dataset.role === key; r.classList.toggle('active', on); r.classList.toggle('auto', on && auto); });
+    keywords.forEach(k => k.classList.toggle('active', k.dataset.kw === key));
+    if (key) hero.dataset.role = key; else delete hero.dataset.role;
+  }
+  function stopRoles() { clearInterval(roleTimer); roleTimer = null; }
+  function startRoles() {
+    stopRoles();
+    if (reduceMotion.matches || hovering || !heroVisible) return;
+    setRole(order[roleIndex], true);
+    roleTimer = setInterval(() => { roleIndex = (roleIndex + 1) % order.length; setRole(order[roleIndex], true); }, 2800);
+  }
+  const pick = key => { hovering = true; stopRoles(); roleIndex = order.indexOf(key); setRole(key, false); };
+  const release = () => { hovering = false; if (reduceMotion.matches) setRole(null); else startRoles(); };
+  [...roles.map(r => [r, r.dataset.role]), ...keywords.map(k => [k, k.dataset.kw])].forEach(([el, key]) => {
+    el.addEventListener('mouseenter', () => pick(key));
+    el.addEventListener('mouseleave', release);
+    el.addEventListener('focus', () => pick(key));
+    el.addEventListener('blur', release);
+  });
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduceMotion.matches) {
+    let frame = 0;
+    hero.addEventListener('pointermove', e => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        const box = hero.querySelector('.hero-bg').getBoundingClientRect();
+        hero.style.setProperty('--mx', `${e.clientX - box.left}px`);
+        hero.style.setProperty('--my', `${e.clientY - box.top}px`);
+        hero.classList.add('pointer');
+        frame = 0;
+      });
+    });
+    hero.addEventListener('pointerleave', () => hero.classList.remove('pointer'));
+  }
+  if (roles.length) {
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => { heroVisible = entry.isIntersecting; heroVisible ? startRoles() : stopRoles(); }, {threshold: .3}).observe(document.querySelector('.hero'));
+    }
+    setTimeout(startRoles, 700);
+  }
+
   // ---------- misc ----------
   function notify(message) {
     clearTimeout(toastTimer);
