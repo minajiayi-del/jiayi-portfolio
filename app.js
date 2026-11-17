@@ -81,8 +81,12 @@
     const prev = list[(index - 1 + list.length) % list.length];
     const next = list[(index + 1) % list.length];
     const extra = (p.gallery || []).filter(src => src !== p.cover);
+    const figs = p.figures || [];
     const coverAlt = p.id === 'rural' ? '乡村品牌设计成果' : p.title + '项目示意封面';
-    const left = `<div class="spread-page spread-left"><div class="page-nav"><button data-back-shelf>← 返回目录</button><span>CHAPTER ${esc(p.no)} / ${String(data.projects.length).padStart(2,'0')}</span></div><p class="detail-eyebrow">${esc(p.english)}</p><h2 id="project-page-title" tabindex="-1">${esc(p.title)}</h2><p class="spread-summary">${esc(p.summary)}</p><figure class="spread-figure${extra.length ? ' has-thumbs' : ''}"><img src="${esc(p.cover)}" alt="${esc(coverAlt)}" width="850" height="300">${extra.map(src => `<img src="${esc(src)}" alt="${esc(p.galleryCaption)}" loading="lazy">`).join('')}</figure><div class="spread-metrics">${p.metrics.map(m => `<div><strong>${esc(m[0])}</strong><span>${esc(m[1])}</span></div>`).join('')}</div><div class="spread-flow" aria-label="项目流程">${p.flow.map((f,i) => `${i ? '<b aria-hidden="true">→</b>' : ''}<span>${esc(f)}</span>`).join('')}</div></div>`;
+    const figureHtml = figs.length
+      ? `<figure class="spread-figure fig-viewer" data-index="0"><button class="fig-stage" data-fig-zoom aria-label="放大查看图片"><img src="${esc(figs[0].src)}" alt="${esc(figs[0].caption)}"><span class="fig-zoom-hint" aria-hidden="true">点击放大 ⤢</span></button><figcaption>${esc(figs[0].caption)}</figcaption></figure><div class="fig-tabs" role="tablist" aria-label="项目图片">${figs.map((fg, i) => `<button role="tab" data-fig="${i}" aria-selected="${i === 0}">${esc(fg.label)}</button>`).join('')}</div>`
+      : `<figure class="spread-figure${extra.length ? ' has-thumbs' : ''}"><img src="${esc(p.cover)}" alt="${esc(coverAlt)}" width="850" height="300">${extra.map(src => `<img src="${esc(src)}" alt="${esc(p.galleryCaption)}" loading="lazy">`).join('')}</figure>`;
+    const left = `<div class="spread-page spread-left"><div class="page-nav"><button data-back-shelf>← 返回目录</button><span>CHAPTER ${esc(p.no)} / ${String(data.projects.length).padStart(2,'0')}</span></div><p class="detail-eyebrow">${esc(p.english)}</p><h2 id="project-page-title" tabindex="-1">${esc(p.title)}</h2><p class="spread-summary">${esc(p.summary)}</p>${figureHtml}<div class="spread-metrics">${p.metrics.map(m => `<div><strong>${esc(m[0])}</strong><span>${esc(m[1])}</span></div>`).join('')}</div><div class="spread-flow" aria-label="项目流程">${p.flow.map((f,i) => `${i ? '<b aria-hidden="true">→</b>' : ''}<span>${esc(f)}</span>`).join('')}</div></div>`;
     const right = `<div class="spread-page spread-right"><div class="spread-meta"><span>${esc(p.role)}</span><span>${esc(p.date)}</span></div><div class="spread-scroll"><div class="spread-sections">${p.sections.map(s => `<section><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></section>`).join('')}</div>${p.gallery?.length ? `<p class="media-note">${esc(p.galleryCaption)}</p>` : ''}${p.mediaNote ? `<p class="media-note">${esc(p.mediaNote)}</p>` : ''}<div class="detail-tags">${p.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div></div><div class="spread-bottom"><button data-project="${esc(prev.id)}">← ${esc(prev.title)}</button><button data-project="${esc(next.id)}">${esc(next.title)} →</button></div></div>`;
     return `<article class="spread" data-id="${esc(p.id)}">${left}${right}</article>`;
   }
@@ -224,6 +228,24 @@
       closeProject();
     }
     if (event.target.closest('[data-back-shelf]')) closeProject();
+    const figTab = event.target.closest('[data-fig]');
+    if (figTab) {
+      const p = data.projects.find(v => v.id === currentProject);
+      const fg = p?.figures?.[Number(figTab.dataset.fig)];
+      const viewer = page.querySelector('.fig-viewer');
+      if (fg && viewer) {
+        const img = viewer.querySelector('img');
+        img.src = fg.src; img.alt = fg.caption;
+        viewer.querySelector('figcaption').textContent = fg.caption;
+        viewer.dataset.index = figTab.dataset.fig;
+        page.querySelectorAll('[data-fig]').forEach(t => t.setAttribute('aria-selected', String(t === figTab)));
+      }
+    }
+    if (event.target.closest('[data-fig-zoom]')) {
+      const p = data.projects.find(v => v.id === currentProject);
+      const fg = p?.figures?.[Number(page.querySelector('.fig-viewer')?.dataset.index || 0)];
+      if (fg) openDialog(`${p.title} / ${fg.label}`, `<div class="photo-detail fig-detail"><img src="${esc(fg.src)}" alt="${esc(fg.caption)}"><h2 id="dialog-title">${esc(fg.label)}</h2><p>${esc(fg.caption)}</p></div>`);
+    }
     const back = event.target.closest('.stamp-back');
     if (back && !event.target.closest('button')) {
       const card = back.closest('.stamp');

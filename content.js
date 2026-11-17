@@ -8,7 +8,7 @@ window.PORTFOLIO = {
       { title: '奖励与认可', date: 'SELECTED HONORS', text: '国家奖学金、四川省优秀毕业生、四川大学优秀毕业生、连续两年四川大学优秀学生。设计竞赛涵盖中国人居环境设计学年奖金奖、米兰设计周一等奖、全国大学生物联网设计竞赛（华为杯）二等奖等。' }
     ] },
     { id: 'ai', title: 'AI 产品探索', english: 'AI & PRODUCT', color: 'blue', icon: '⌘', sub: '让能力变成可用的体验', detailTitle: '从模型能力，到用户价值。', intro: '关注 AI 工具的端到端流程、输出质量和用户接入门槛。', items: [
-      { title: 'WalkSeg-R · 街景 AI 诊断', date: '2025.12 — 2026.03', text: '参与多模态 AI 产品研究与效果评估，梳理 VLM 与图像分割模型协同机制，将模型输出转译为设计师可理解、可复核的空间诊断结果。', project: 'walkseg' },
+      { title: 'WalkSeg-R · 街景 AI 诊断', date: '2025.12 — 2026.03', text: '负责 VLM（LoRA）与语义分割模型的微调、联调与部署，把“街景 + 一句提问”变成问题区域、原因解释和优化建议，并参与用户评测验证可用性。', project: 'walkseg' },
       { title: 'AI 工具接入与产品文档', date: '2026.02 — 2026.04', text: '参与梳理大模型 API 接入服务，设计新手教程、FAQ 与标准回复，降低非技术用户的配置门槛。', project: 'onboarding' }
     ] },
     { id: 'research', title: '用户与研究', english: 'PEOPLE & INSIGHT', color: 'sage', icon: '◎', sub: '从真实感受找到线索', detailTitle: '理解人，才是研究的起点。', intro: '结合主观评价、行为与情绪数据，把难以表达的感受变成可讨论的设计依据。', items: [
@@ -36,13 +36,20 @@ window.PORTFOLIO = {
     { image: 'assets/choir.webp', title: '在舞台上一起发光', note: 'LIFE BEYOND WORK', angle: -4 }
   ],
   projects: [
-    { id: 'walkseg', no: '01', category: 'ai', title: 'WalkSeg-R', subtitle: '让街景问题，被 AI 看见', english: 'MULTIMODAL AI · PRODUCT RESEARCH', color: 'blue', cover: 'assets/cover-walkseg.svg', role: '多模态 AI 产品研究与效果评估', date: '2025.12 — 2026.03', tags: ['多模态 AI', '效果评估', '体验诊断'], summary: '从一张街景图，到一份能理解、能复核、能应用的空间诊断。', metrics: [['4,800+', '数据集图像'], ['20', '代表性样本'], ['20', '评估者']],
+    { id: 'walkseg', no: '01', category: 'ai', title: 'WalkSeg-R', subtitle: '一张街景 + 一句提问，AI 说出哪里不好走、为什么', english: 'MULTIMODAL AI · VLM × SEGMENTATION', color: 'blue', cover: 'assets/walkseg/overview.jpg', role: 'AI 产品 · VLM 与分割模型微调、部署 · 用户评测', date: '2025.12 — 2026.03', tags: ['VLM + LoRA', '语义分割', '可解释 AI', '用户评测'], summary: '上传一张人行道街景，问一句“哪里对行人不友好”，就能得到问题在哪、是什么、为什么、怎么改。', metrics: [['4,800+', '人行道视角街景'], ['4.4+', '检测准确性评分 / 5'], ['4.67', '解释正确性（专业组）/ 5']],
+      figures: [
+        { src: 'assets/walkseg/overview.jpg', label: '产品形态', caption: '输入：人行道街景 + 一句自然语言提问；输出：问题区域 mask、问题类型、原因解释与优化建议。' },
+        { src: 'assets/walkseg/framework.jpg', label: '技术框架', caption: '多模态大模型（LoRA 微调）把提问编码为语义控制向量 ξseg，引导 SPF、PDA 与动态解码器输出问题区域，同时生成文字解释。' },
+        { src: 'assets/walkseg/dataset.jpg', label: '数据', caption: 'WalkScene：4,800+ 张新加坡人行道视角街景，覆盖 6 类街区；对比 Google Street View、Cityscapes 等车行视角数据。' },
+        { src: 'assets/walkseg/diagnosis.jpg', label: '诊断结果', caption: '模型标出绿植侵占、垃圾桶占道、人行道过窄、遮荫不足、连续性断裂等问题，并逐条给出解释。' },
+        { src: 'assets/walkseg/eval-explain.jpg', label: '用户评测', caption: '10 位专业人士 + 10 位非专业用户，对 20 个样本的解释正确性、相关性和清晰度打分（5 分制）。' }
+      ],
       sections: [
-        { title: '01 / 从什么问题出发', text: '城市街景的步行体验评估依赖人工巡检，问题定位不直观，诊断结果也难以复用。项目探索把传统街景分析转化为“图像输入—AI 识别—问题区域标注—文本解释—优化建议”的工具型产品流程。' },
-        { title: '02 / 我参与了什么', text: '参与 WalkSeg-R 技术框架研究，梳理 VLM 与图像分割模型的协同机制；辅助建立步道遮挡、路径断裂、绿荫不足、铺装破损、街道设施缺失等识别任务。重点关注模型能力如何对应真实空间问题。' },
-        { title: '03 / 如何评估体验', text: '基于 WalkScene 数据集中的 4,800+ 张高分辨率图像，使用 20 个代表性样本与 20 名评估者开展 5 分制测评。参与整理识别准确性、解释清晰度、空间一致性与用户理解成本等维度的评价结果。' },
-        { title: '04 / 让输出真正可用', text: '将模型输出转译为“问题位置 + 问题类型 + 原因解释 + 优化建议”，帮助设计师理解、复核并应用诊断结果。这个过程让我更加关注：解释是否清楚，和识别是否准确一样重要。' }
-      ], flow: ['街景 + Prompt', '语义对齐与分割', '区域标注', '解释与建议'], mediaNote: '封面为项目流程示意，后续可替换为真实街景标注与评测图。' },
+        { title: '01 / 洞察：缺一个“会解释”的诊断工具', text: '人工踏勘耗时又主观；分割模型只能回答“哪里是什么”，通用 VLM 会解释却定位不稳。于是把需求收敛为：一张人行道街景 + 一句提问 → 问题区域、类型、原因和建议。' },
+        { title: '02 / 方案：让语言引导分割', text: 'VLM 理解提问，经 LoRA 映射为语义控制向量；SPF 放大与步行相关的区域，PDA 捕捉“与适宜步行预期不符”之处，动态解码器输出 mask。选 LoRA 是为省算力、快迭代；用文本提示，新问题类型无需重新标注。' },
+        { title: '03 / 我负责的部分', text: 'VLM（LoRA）与语义分割模型的微调、联调和部署，跑通“街景 + 提问 → mask + 解释”的端到端流程；把输出整理成设计师可复核的诊断结果；参与 20 个样本 × 20 位评估者的用户评测。' },
+        { title: '04 / 验证与产品洞察', text: '检测准确性 > 4.4/5；解释正确性专业组 4.67、非专业组 4.43，差异不显著（p > 0.05）。非专业用户更反感过度标注（2.40），面向大众时应降低标注密度。下一步：跨城市泛化，开源 WalkScene 数据集。' }
+      ], flow: ['街景 + 一句提问', 'VLM 理解（LoRA）', '语义引导分割', 'mask + 解释 + 建议'], galleryCaption: '图片来自 WalkSeg-R 论文（CAADRIA 2026 投稿）。' },
     { id: 'safety', no: '02', category: 'ai', title: '感知安全的线索', subtitle: '把人的感受，变成研究依据', english: 'USER RESEARCH · FACIAL EXPRESSION', color: 'sage', cover: 'assets/cover-safety.svg', role: '第一作者 · 研究设计与数据分析', date: '2023.11 — 2025.03', tags: ['SSCI 二区一作', '用户研究', '情绪识别'], summary: '结合面部情绪识别与主观评价，理解乡村景观中的不安全感。', metrics: [['1,200+', '情绪数据'], ['500+', '问卷数据'], ['4', '核心影响因素']],
       sections: [
         { title: '01 / 研究问题', text: '乡村旅游场景中，用户的不安全感如何形成、如何识别，又如何转化为空间优化策略？研究通过乡村视听场景样本，探索视听组合对感知安全的影响。' },
