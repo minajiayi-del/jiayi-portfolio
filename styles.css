@@ -215,3 +215,23 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 .fig-viewer figcaption{min-height:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .spread-left:has(.fig-viewer) .spread-summary{margin-top:6px}
 .spread-left:has(.fig-viewer) .page-nav{margin-bottom:12px}
+
+/* v10: trimmed notebook chrome, larger figures */
+.notebook-body{padding-top:28px;padding-bottom:28px}
+.spread{height:660px}
+.spread-left{padding-right:28px}
+.spread .page-nav{margin-bottom:10px}
+.spread h2{font-size:30px;margin-top:0}
+.spread-left .spread-summary{font-size:15px;margin-top:6px}
+.spread-figure.fig-viewer{margin-top:12px}
+.fig-stage{padding:4px}
+.spread-metrics{margin-top:12px}
+.spread-meta{justify-content:flex-end;padding-bottom:8px}
+.book-content h3{margin-top:4px}
+@media(max-width:850px){.fig-stage{height:280px}.spread-figure{height:240px}}
+@media(min-width:851px){.spread{grid-template-columns:1.35fr 1fr}.spread:after{left:57.45%}}
+@media(max-width:850px){.fig-stage{height:auto;min-height:160px;padding:2px}.fig-stage img{width:100%}}
+/* v11: tighter page margins */
+@media(min-width:851px){.notebook.reading .notebook-body{padding-top:16px;padding-bottom:16px}.spread-page{padding:20px 22px}.spread-left{padding-right:26px}.spread-right{padding-left:28px}.spread-sections p{line-height:1.7}}
+@media(min-width:851px){.spread{height:690px}.spread-sections p{line-height:1.65}.spread[data-id="walkseg"]{grid-template-columns:1.12fr 1fr}.spread[data-id="walkseg"]:after{left:52.8%}}
+@media(min-width:851px){.spread[data-id="walkseg"]{height:745px}}
