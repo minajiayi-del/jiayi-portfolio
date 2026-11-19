@@ -86,8 +86,8 @@
     const figureHtml = figs.length
       ? `<figure class="spread-figure fig-viewer" data-index="0"><button class="fig-stage" data-fig-zoom aria-label="放大查看图片"><img src="${esc(figs[0].src)}" alt="${esc(figs[0].caption)}"><span class="fig-zoom-hint" aria-hidden="true">点击放大 ⤢</span></button><figcaption>${esc(figs[0].caption)}</figcaption></figure><div class="fig-tabs" role="tablist" aria-label="项目图片">${figs.map((fg, i) => `<button role="tab" data-fig="${i}" aria-selected="${i === 0}">${esc(fg.label)}</button>`).join('')}</div>`
       : `<figure class="spread-figure${extra.length ? ' has-thumbs' : ''}"><img src="${esc(p.cover)}" alt="${esc(coverAlt)}" width="850" height="300">${extra.map(src => `<img src="${esc(src)}" alt="${esc(p.galleryCaption)}" loading="lazy">`).join('')}</figure>`;
-    const left = `<div class="spread-page spread-left"><div class="page-nav"><button data-back-shelf>← 返回目录</button></div><h2 id="project-page-title" tabindex="-1">${esc(p.title)}</h2><p class="spread-summary">${esc(p.summary)}</p>${figureHtml}<div class="spread-metrics">${p.metrics.map(m => `<div><strong>${esc(m[0])}</strong><span>${esc(m[1])}</span></div>`).join('')}</div><div class="spread-flow" aria-label="项目流程">${p.flow.map((f,i) => `${i ? '<b aria-hidden="true">→</b>' : ''}<span>${esc(f)}</span>`).join('')}</div></div>`;
-    const right = `<div class="spread-page spread-right"><div class="spread-meta"><span>${esc(p.date)}</span></div><div class="spread-scroll"><div class="spread-sections">${p.sections.map(s => `<section><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></section>`).join('')}</div>${p.gallery?.length ? `<p class="media-note">${esc(p.galleryCaption)}</p>` : ''}${p.mediaNote ? `<p class="media-note">${esc(p.mediaNote)}</p>` : ''}</div><div class="spread-bottom"><button data-project="${esc(prev.id)}">← ${esc(prev.title)}</button><button data-project="${esc(next.id)}">${esc(next.title)} →</button></div></div>`;
+    const left = `<div class="spread-page spread-left"><div class="page-head page-nav"><button data-back-shelf>← 返回目录</button></div><div class="spread-body"><h2 id="project-page-title" tabindex="-1">${esc(p.title)}</h2><p class="spread-summary">${esc(p.summary)}</p>${figureHtml}<div class="spread-flow" aria-label="项目流程">${p.flow.map((f,i) => `${i ? '<b aria-hidden="true">→</b>' : ''}<span>${esc(f)}</span>`).join('')}</div></div><div class="page-foot spread-metrics">${p.metrics.map(m => `<div><strong>${esc(m[0])}</strong><span>${esc(m[1])}</span></div>`).join('')}</div></div>`;
+    const right = `<div class="spread-page spread-right"><div class="page-head spread-meta"><span>${esc(p.date)}</span></div><div class="spread-scroll"><div class="spread-sections">${p.sections.map(s => `<section><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></section>`).join('')}</div>${p.gallery?.length ? `<p class="media-note">${esc(p.galleryCaption)}</p>` : ''}${p.mediaNote ? `<p class="media-note">${esc(p.mediaNote)}</p>` : ''}</div><div class="page-foot spread-bottom"><button data-project="${esc(prev.id)}">← ${esc(prev.title)}</button><button data-project="${esc(next.id)}">${esc(next.title)} →</button></div></div>`;
     return `<article class="spread" data-id="${esc(p.id)}">${left}${right}</article>`;
   }
 
@@ -235,8 +235,12 @@
       const viewer = page.querySelector('.fig-viewer');
       if (fg && viewer) {
         const img = viewer.querySelector('img');
+        const cap = viewer.querySelector('figcaption');
+        const dir = Number(figTab.dataset.fig) >= Number(viewer.dataset.index || 0) ? 'fig-in-r' : 'fig-in-l';
         img.src = fg.src; img.alt = fg.caption;
-        viewer.querySelector('figcaption').textContent = fg.caption;
+        cap.textContent = fg.caption;
+        [img, cap].forEach(el => { el.classList.remove('fig-in-r', 'fig-in-l', 'fig-fade'); void el.offsetWidth; });
+        img.classList.add(dir); cap.classList.add('fig-fade');
         viewer.dataset.index = figTab.dataset.fig;
         page.querySelectorAll('[data-fig]').forEach(t => t.setAttribute('aria-selected', String(t === figTab)));
       }
